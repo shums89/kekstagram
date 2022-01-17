@@ -24,10 +24,12 @@ const getUniqueValue = (array, min, max) => {
   return id;
 };
 
+const removeDuplicate = (arr) => [...new Set(arr)];
+
 const checkingMaxLength = (text, count) => {
   return text.length <= count;
 };
 
 // checkingMaxLength('Какая интересная фотка', POSTS_DATA.comment_max_length);
 
-export { getRandomInt, getRandomElement, getUniqueValue, checkingMaxLength };
+export { getRandomInt, getRandomElement, getUniqueValue, removeDuplicate, checkingMaxLength };
