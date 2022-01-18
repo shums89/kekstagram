@@ -32,4 +32,8 @@ const checkingMaxLength = (text, count) => {
 
 // checkingMaxLength('Какая интересная фотка', POSTS_DATA.comment_max_length);
 
-export { getRandomInt, getRandomElement, getUniqueValue, removeDuplicate, checkingMaxLength };
+const isEscEvent = (evt) => {
+  return evt.key === 'Escape' || evt.key === 'Esc';
+};
+
+export { getRandomInt, getRandomElement, getUniqueValue, removeDuplicate, checkingMaxLength, isEscEvent };
