@@ -36,7 +36,7 @@ const createComment = () => {
 
     let messages = new Array(2)                                         // объявляем массив
       .fill(null)                                                       // присваиваем null всум элементам
-      .map(() => getRandomElement(POSTS_DATA.comments))                    // заполняем случайными значениями
+      .map(() => getRandomElement(POSTS_DATA.comments))                 // заполняем случайными значениями
       .filter((item, index) => index ? getRandomInt(0, 1) : 1)          // оставляем первый элемент (чтоб не был пустым), остальные выводим рандомно
       .reduce((result, item) => {                                       // удаляем дубликаты
         return result.includes(item) ? result : [...result, item];
