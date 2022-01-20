@@ -1,40 +1,41 @@
-import { isEscEvent } from './util.js';
-
-const body = document.querySelector('body');
-const imgUpload = body.querySelector('.img-upload');
-const uploadFileInput = imgUpload.querySelector('#upload-file');
-const imgUploadOverlay = imgUpload.querySelector('.img-upload__overlay');
-const imgUploadCancel = imgUpload.querySelector('.img-upload__cancel');
-
-const openUploadForm = () => {
-  imgUploadOverlay.classList.remove('hidden');
-  body.classList.add('modal-open');
-
-  document.addEventListener('keydown', onPopupEscKeydown);
-  imgUploadCancel.addEventListener('click', closeUploadForm);
+const Zoom = {
+  MIN: 25,
+  MAX: 100,
+  STEP: 25,
 };
 
-const closeUploadForm = () => {
-  uploadFileInput.value = '';
+const scaleControlValue = document.querySelector('.scale__control--value');
+const imgUploadPreview = document.querySelector('.img-upload__preview');
 
-  imgUploadOverlay.classList.add('hidden');
-  body.classList.remove('modal-open');
-
-  document.removeEventListener('keydown', onPopupEscKeydown);
-  imgUploadCancel.removeEventListener('click', closeUploadForm);
-};
-
-const onPopupEscKeydown = (evt) => {
-  if (isEscEvent(evt)) {
-    if (!document.activeElement.matches('.text__hashtags')) {
-      evt.preventDefault();
-      closeUploadForm();
-    }
+const getValue = (percent) => {
+  if (percent[percent.length - 1] === '%') {
+    return +percent.slice(0, percent.length - 1);
+  } else {
+    return +percent;
   }
 };
 
-uploadFileInput.addEventListener('change', () => {
-  openUploadForm();
-});
+const zoomImage = (value) => {
+  scaleControlValue.value = `${value}%`;
+  imgUploadPreview.style = `transform: scale(${value / 100})`;
+};
 
-openUploadForm();
+const zoomIn = () => {
+  let value = getValue(scaleControlValue.value) - Zoom.STEP;
+  if (value < Zoom.MIN) {
+    value = Zoom.MIN;
+  }
+
+  zoomImage(value);
+};
+
+const zoomOut = () => {
+  let value = getValue(scaleControlValue.value) + Zoom.STEP;
+  if (value > Zoom.MAX) {
+    value = Zoom.MAX;
+  }
+
+  zoomImage(value);
+};
+
+export { zoomIn, zoomOut };
