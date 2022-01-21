@@ -1,5 +1,6 @@
 import { isEscEvent } from './util.js';
-import { zoomIn, zoomOut } from './editor.js';
+import { zoomIn, zoomOut } from './zoom.js';
+import { resetEffectImage, createSlider, destroySlider } from './editor.js';
 
 const body = document.querySelector('body');
 const imgUpload = body.querySelector('.img-upload');
@@ -7,7 +8,7 @@ const uploadFileInput = imgUpload.querySelector('#upload-file');
 const imgUploadOverlay = imgUpload.querySelector('.img-upload__overlay');
 const imgUploadCancel = imgUpload.querySelector('.img-upload__cancel');
 
-const imgUploadPreview = document.querySelector('.img-upload__preview');
+const imgUploadPreview = document.querySelector('.img-upload__preview img');
 const imgUploadScale = document.querySelector('.img-upload__scale');
 const scaleControlValue = imgUploadScale.querySelector('.scale__control--value');
 const scaleControlSmaller = imgUploadScale.querySelector('.scale__control--smaller');
@@ -17,13 +18,16 @@ const resetForm = () => {
   uploadFileInput.value = '';
 
   scaleControlValue.value = '100%';
-  imgUploadPreview.style = 'transform: scale(1)';
+  imgUploadPreview.style = '';
+
+  resetEffectImage();
 };
 
 const openUploadForm = () => {
   imgUploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
   resetForm();
+  createSlider();
 
   document.addEventListener('keydown', onPopupEscKeydown);
   imgUploadCancel.addEventListener('click', closeUploadForm);
@@ -34,6 +38,7 @@ const openUploadForm = () => {
 const closeUploadForm = () => {
   imgUploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
+  destroySlider();
 
   document.removeEventListener('keydown', onPopupEscKeydown);
   imgUploadCancel.removeEventListener('click', closeUploadForm);
