@@ -2,15 +2,16 @@ import { isEscEvent } from './util.js';
 import { zoomIn, zoomOut } from './zoom.js';
 import { resetEffectImage, createSlider, destroySlider } from './editor.js';
 import { validationHashtag } from './validation.js';
+import { request } from './network.js';
 
 const body = document.querySelector('body');
-const imgUpload = body.querySelector('.img-upload');
-const uploadFileInput = imgUpload.querySelector('#upload-file');
-const imgUploadOverlay = imgUpload.querySelector('.img-upload__overlay');
-const imgUploadCancel = imgUpload.querySelector('.img-upload__cancel');
+const imgUploadForm = body.querySelector('.img-upload__form');
+const uploadFileInput = imgUploadForm.querySelector('#upload-file');
+const imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
+const imgUploadCancel = imgUploadForm.querySelector('.img-upload__cancel');
 
-const imgUploadPreview = document.querySelector('.img-upload__preview img');
-const imgUploadScale = document.querySelector('.img-upload__scale');
+const imgUploadPreview = imgUploadForm.querySelector('.img-upload__preview img');
+const imgUploadScale = imgUploadForm.querySelector('.img-upload__scale');
 const scaleControlValue = imgUploadScale.querySelector('.scale__control--value');
 const scaleControlSmaller = imgUploadScale.querySelector('.scale__control--smaller');
 const scaleControlBigger = imgUploadScale.querySelector('.scale__control--bigger');
@@ -75,4 +76,14 @@ const onHashtagsInput = () => {
   textHashtags.reportValidity();
 };
 
+const onFail = (error) => {
+  console.log(error);
+};
+
 uploadFileInput.addEventListener('change', openUploadForm);
+
+imgUploadForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  request(closeUploadForm, onFail, 'POST', new FormData(evt.target));
+});
