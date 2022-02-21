@@ -2,6 +2,7 @@ import { isEscEvent } from './util.js';
 import { zoomIn, zoomOut } from './zoom.js';
 import { resetEffectImage, createSlider, destroySlider } from './editor.js';
 import { validationHashtag } from './validation.js';
+import { showSuccessLoad, showErrorLoad } from './modal.js';
 import { request } from './network.js';
 
 const body = document.querySelector('body');
@@ -76,8 +77,9 @@ const onHashtagsInput = () => {
   textHashtags.reportValidity();
 };
 
-const onFail = (error) => {
-  console.log(error);
+const onSuccess = () => {
+  closeUploadForm();
+  showSuccessLoad();
 };
 
 uploadFileInput.addEventListener('change', openUploadForm);
@@ -85,5 +87,5 @@ uploadFileInput.addEventListener('change', openUploadForm);
 imgUploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
-  request(closeUploadForm, onFail, 'POST', new FormData(evt.target));
+  request(onSuccess, showErrorLoad, 'POST', new FormData(evt.target));
 });

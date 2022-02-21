@@ -21,7 +21,7 @@ const request = (onSuccess, onFail, method, data) => {
         return response.json();
       }
 
-      throw new Error(`Ошибка ${response.status}: ${ServerCodes[response.status] ? ServerCodes[response.status] : response.statusText}`);
+      throw new Error(`${response.status} (${ServerCodes[response.status] ? ServerCodes[response.status] : response.statusText})`);
     })
     .then((response) => {
       onSuccess(response);
