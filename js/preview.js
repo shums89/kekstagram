@@ -1,4 +1,3 @@
-import { posts } from './data.js';
 import { postOpen } from './post.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -19,7 +18,7 @@ const createPostPreview = (post) => {
   return postPreview;
 };
 
-const renderPosts = () => {
+const renderPosts = (posts) => {
   const picturesFragment = document.createDocumentFragment();
 
   posts.forEach((post) => {

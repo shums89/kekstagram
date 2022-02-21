@@ -215,12 +215,22 @@
     </li>
   </template>
 
+  <!-- Сообщение с ошибкой о получении данных -->
+  <template id="error-receive">
+    <section class="error">
+      <div class="error__inner">
+        <h2 class="error__title">Ошибка при получении данных</h2>
+        <p class="error__subtitle">Будут использованы сгенерированные данные</p>
+      </div>
+    </section>
+  </template>
+
   <!-- Сообщение с ошибкой загрузки изображения -->
   <template id="error">
     <section class="error">
       <div class="error__inner">
         <h2 class="error__title">Ошибка загрузки файла</h2>
-        <button type="button" class="error__button">Загрузить другой файл</button>
+        <!-- <button type="button" class="error__button">Загрузить другой файл</button> -->
       </div>
     </section>
   </template>
@@ -230,7 +240,7 @@
     <section class="success">
       <div class="success__inner">
         <h2 class="success__title">Изображение успешно загружено</h2>
-        <button type="button" class="success__button">Круто!</button>
+        <!-- <button type="button" class="success__button">Круто!</button> -->
       </div>
     </section>
   </template>
