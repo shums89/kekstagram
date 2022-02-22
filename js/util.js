@@ -44,6 +44,7 @@ const shuffle = (arr) => {
   return arr;
 };
 
+// words = [1, 2, 5] => [один символ, два символа, пять символов]
 const getWordEnding = (number, words) => {
   const cases = [2, 0, 1, 1, 1, 2];
   return words[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
