@@ -1,6 +1,6 @@
 import { isEscEvent } from './util.js';
 import { zoomIn, zoomOut } from './zoom.js';
-import { resetEffectImage, createSlider, destroySlider } from './editor.js';
+import { resetEffectImage, createSlider, destroySlider, onEffectsChange } from './editor.js';
 import { validationText } from './validation.js';
 import { showSuccessLoad, showErrorLoad } from './modal.js';
 import { request } from './network.js';
@@ -17,6 +17,7 @@ const scaleControlValue = imgUploadScale.querySelector('.scale__control--value')
 const scaleControlSmaller = imgUploadScale.querySelector('.scale__control--smaller');
 const scaleControlBigger = imgUploadScale.querySelector('.scale__control--bigger');
 
+const effects = document.querySelector('.img-upload__effects');
 const textHashtags = document.querySelector('.text__hashtags');
 const textDescription = document.querySelector('.text__description');
 
@@ -37,8 +38,10 @@ const openUploadForm = () => {
   imgUploadCancel.addEventListener('click', closeUploadForm);
   scaleControlSmaller.addEventListener('click', zoomIn);
   scaleControlBigger.addEventListener('click', zoomOut);
+  effects.addEventListener('change', onEffectsChange);
   textHashtags.addEventListener('input', onHashtagsInput);
   textDescription.addEventListener('input', onDescriptionInput);
+  imgUploadForm.addEventListener('submit', onImgUploadFormSubmit);
 };
 
 const closeUploadForm = () => {
@@ -51,9 +54,14 @@ const closeUploadForm = () => {
   imgUploadCancel.removeEventListener('click', closeUploadForm);
   scaleControlSmaller.removeEventListener('click', zoomIn);
   scaleControlBigger.removeEventListener('click', zoomOut);
+  effects.removeEventListener('change', onEffectsChange);
   textHashtags.removeEventListener('input', onHashtagsInput);
   textDescription.removeEventListener('input', onDescriptionInput);
+  imgUploadForm.removeEventListener('submit', onImgUploadFormSubmit);
 };
+
+const onHashtagsInput = () => validationText(textHashtags, 'hashtag');
+const onDescriptionInput = () => validationText(textDescription, 'description');
 
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
@@ -65,18 +73,15 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 
-const onHashtagsInput = () => validationText(textHashtags, 'hashtag');
-const onDescriptionInput = () => validationText(textDescription, 'description');
-
 const onSuccess = () => {
   closeUploadForm();
   showSuccessLoad();
 };
 
-uploadFileInput.addEventListener('change', openUploadForm);
-
-imgUploadForm.addEventListener('submit', (evt) => {
+const onImgUploadFormSubmit = (evt) => {
   evt.preventDefault();
 
   request(onSuccess, showErrorLoad, 'POST', new FormData(evt.target));
-});
+};
+
+uploadFileInput.addEventListener('change', openUploadForm);
