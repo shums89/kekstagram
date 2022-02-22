@@ -44,11 +44,10 @@ const shuffle = (arr) => {
   return arr;
 };
 
-const checkingMaxLength = (text, count) => {
-  return text.length <= count;
+const getWordEnding = (number, words) => {
+  const cases = [2, 0, 1, 1, 1, 2];
+  return words[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
 };
-
-// checkingMaxLength('Какая интересная фотка', POSTS_DATA.comment_max_length);
 
 const isEscEvent = (evt) => {
   return evt.key === Keys.ESC || evt.key === Keys.ESCAPE;
@@ -68,4 +67,4 @@ const debounce = (callback) => {
   };
 };
 
-export { getRandomInt, getRandomElement, getUniqueValue, removeDuplicate, shuffle, checkingMaxLength, isEscEvent, debounce };
+export { getRandomInt, getRandomElement, getUniqueValue, removeDuplicate, shuffle, getWordEnding, isEscEvent, debounce };

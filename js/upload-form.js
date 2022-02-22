@@ -1,7 +1,7 @@
 import { isEscEvent } from './util.js';
 import { zoomIn, zoomOut } from './zoom.js';
 import { resetEffectImage, createSlider, destroySlider } from './editor.js';
-import { validationHashtag } from './validation.js';
+import { validationText } from './validation.js';
 import { showSuccessLoad, showErrorLoad } from './modal.js';
 import { request } from './network.js';
 
@@ -18,6 +18,7 @@ const scaleControlSmaller = imgUploadScale.querySelector('.scale__control--small
 const scaleControlBigger = imgUploadScale.querySelector('.scale__control--bigger');
 
 const textHashtags = document.querySelector('.text__hashtags');
+const textDescription = document.querySelector('.text__description');
 
 const resetForm = () => {
   scaleControlValue.value = '100%';
@@ -37,6 +38,7 @@ const openUploadForm = () => {
   scaleControlSmaller.addEventListener('click', zoomIn);
   scaleControlBigger.addEventListener('click', zoomOut);
   textHashtags.addEventListener('input', onHashtagsInput);
+  textDescription.addEventListener('input', onDescriptionInput);
 };
 
 const closeUploadForm = () => {
@@ -50,6 +52,7 @@ const closeUploadForm = () => {
   scaleControlSmaller.removeEventListener('click', zoomIn);
   scaleControlBigger.removeEventListener('click', zoomOut);
   textHashtags.removeEventListener('input', onHashtagsInput);
+  textDescription.removeEventListener('input', onDescriptionInput);
 };
 
 const onPopupEscKeydown = (evt) => {
@@ -62,20 +65,8 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 
-const onHashtagsInput = () => {
-  textHashtags.setCustomValidity('');
-  textHashtags.style.border = 'none';
-
-  const errorMessage = validationHashtag(textHashtags.value);
-  if (errorMessage) {
-    textHashtags.setCustomValidity(errorMessage);
-    textHashtags.style.border = '2px solid red';
-  } else {
-    textHashtags.style.border = 'none';
-  }
-
-  textHashtags.reportValidity();
-};
+const onHashtagsInput = () => validationText(textHashtags, 'hashtag');
+const onDescriptionInput = () => validationText(textDescription, 'description');
 
 const onSuccess = () => {
   closeUploadForm();
