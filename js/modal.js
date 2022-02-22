@@ -1,6 +1,3 @@
-import { createPosts, posts } from './data.js';
-import { renderPosts } from './preview.js';
-
 const MODAL_SHOW_TIME = 3000;
 
 const receiveErrorTemplate = document.querySelector('#error-receive').content.querySelector('.error');
@@ -32,9 +29,7 @@ const removeModal = () => {
 
 const showErrorReceive = (message) => {
   document.body.append(createModalFragment(receiveErrorTemplate, message));
-  removeModal()
-    .then(() => createPosts())
-    .then(() => renderPosts(posts));
+  return removeModal();
 };
 
 const showSuccessLoad = () => {

@@ -1,6 +1,6 @@
 import { removePictures, renderPosts } from './preview.js';
 import { POSTS_DATA, posts as generatedPosts } from './data.js';
-import { posts as receivedPosts } from './main.js';
+import { posts as receivedPosts } from './load.js';
 import { shuffle, debounce } from './util.js';
 
 const filter = document.querySelector('.img-filters');
