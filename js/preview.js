@@ -1,7 +1,16 @@
 import { postOpen } from './post.js';
+import { showBlockFilter } from './filter.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
-const pictures = document.querySelector('.pictures');
+const picturesBlock = document.querySelector('.pictures');
+
+const removePictures = () => {
+  const pictures = picturesBlock.querySelectorAll('.picture');
+
+  pictures.forEach(picture => {
+    picture.remove();
+  });
+};
 
 const createPostPreview = (post) => {
   const postPreview = pictureTemplate.cloneNode(true);
@@ -18,14 +27,20 @@ const createPostPreview = (post) => {
   return postPreview;
 };
 
-const renderPosts = (posts) => {
+const renderPosts = (posts, callback) => {
   const picturesFragment = document.createDocumentFragment();
 
   posts.forEach((post) => {
     picturesFragment.appendChild(createPostPreview(post));
   });
 
-  pictures.appendChild(picturesFragment);
+  picturesBlock.appendChild(picturesFragment);
+
+  showBlockFilter();
+
+  if (callback) {
+    callback();
+  }
 };
 
-export { renderPosts };
+export { removePictures, renderPosts };

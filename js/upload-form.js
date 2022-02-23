@@ -1,7 +1,7 @@
-import { isEscEvent } from './util.js';
+import { isEscEvent, getPhotoSrc } from './util.js';
 import { zoomIn, zoomOut } from './zoom.js';
-import { resetEffectImage, createSlider, destroySlider } from './editor.js';
-import { validationHashtag } from './validation.js';
+import { resetEffectImage, createSlider, destroySlider, onEffectsChange } from './editor.js';
+import { validationText } from './validation.js';
 import { showSuccessLoad, showErrorLoad } from './modal.js';
 import { request } from './network.js';
 
@@ -12,12 +12,15 @@ const imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
 const imgUploadCancel = imgUploadForm.querySelector('.img-upload__cancel');
 
 const imgUploadPreview = imgUploadForm.querySelector('.img-upload__preview img');
+const imgEffectsPreviews = imgUploadForm.querySelectorAll('.effects__preview');
 const imgUploadScale = imgUploadForm.querySelector('.img-upload__scale');
 const scaleControlValue = imgUploadScale.querySelector('.scale__control--value');
 const scaleControlSmaller = imgUploadScale.querySelector('.scale__control--smaller');
 const scaleControlBigger = imgUploadScale.querySelector('.scale__control--bigger');
 
+const effects = document.querySelector('.img-upload__effects');
 const textHashtags = document.querySelector('.text__hashtags');
+const textDescription = document.querySelector('.text__description');
 
 const resetForm = () => {
   scaleControlValue.value = '100%';
@@ -26,17 +29,36 @@ const resetForm = () => {
   resetEffectImage();
 };
 
+const renderPhotoPreview = (src) => {
+  imgUploadPreview.src = src;
+
+  imgEffectsPreviews.forEach(element => {
+    element.style.backgroundImage = `url(${src})`;
+  });
+};
+
+const loadPreview = () => {
+  getPhotoSrc(uploadFileInput)
+    .then((data) => renderPhotoPreview(data))
+    .then(() => openUploadForm())
+    .catch((error) => showErrorLoad(error));
+};
+
 const openUploadForm = () => {
-  imgUploadOverlay.classList.remove('hidden');
-  body.classList.add('modal-open');
   resetForm();
   createSlider();
+
+  body.classList.add('modal-open');
+  imgUploadOverlay.classList.remove('hidden');
 
   document.addEventListener('keydown', onPopupEscKeydown);
   imgUploadCancel.addEventListener('click', closeUploadForm);
   scaleControlSmaller.addEventListener('click', zoomIn);
   scaleControlBigger.addEventListener('click', zoomOut);
+  effects.addEventListener('change', onEffectsChange);
   textHashtags.addEventListener('input', onHashtagsInput);
+  textDescription.addEventListener('input', onDescriptionInput);
+  imgUploadForm.addEventListener('submit', onImgUploadFormSubmit);
 };
 
 const closeUploadForm = () => {
@@ -49,8 +71,14 @@ const closeUploadForm = () => {
   imgUploadCancel.removeEventListener('click', closeUploadForm);
   scaleControlSmaller.removeEventListener('click', zoomIn);
   scaleControlBigger.removeEventListener('click', zoomOut);
+  effects.removeEventListener('change', onEffectsChange);
   textHashtags.removeEventListener('input', onHashtagsInput);
+  textDescription.removeEventListener('input', onDescriptionInput);
+  imgUploadForm.removeEventListener('submit', onImgUploadFormSubmit);
 };
+
+const onHashtagsInput = () => validationText(textHashtags, 'hashtag');
+const onDescriptionInput = () => validationText(textDescription, 'description');
 
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
@@ -62,30 +90,15 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 
-const onHashtagsInput = () => {
-  textHashtags.setCustomValidity('');
-  textHashtags.style.border = 'none';
-
-  const errorMessage = validationHashtag(textHashtags.value);
-  if (errorMessage) {
-    textHashtags.setCustomValidity(errorMessage);
-    textHashtags.style.border = '2px solid red';
-  } else {
-    textHashtags.style.border = 'none';
-  }
-
-  textHashtags.reportValidity();
-};
-
 const onSuccess = () => {
   closeUploadForm();
   showSuccessLoad();
 };
 
-uploadFileInput.addEventListener('change', openUploadForm);
-
-imgUploadForm.addEventListener('submit', (evt) => {
+const onImgUploadFormSubmit = (evt) => {
   evt.preventDefault();
 
   request(onSuccess, showErrorLoad, 'POST', new FormData(evt.target));
-});
+};
+
+uploadFileInput.addEventListener('change', loadPreview);
