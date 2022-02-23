@@ -37,8 +37,14 @@ const renderPhotoPreview = (src) => {
   });
 };
 
+const loadPreview = () => {
+  getPhotoSrc(uploadFileInput)
+    .then((data) => renderPhotoPreview(data))
+    .then(() => openUploadForm())
+    .catch((error) => showErrorLoad(error));
+};
+
 const openUploadForm = () => {
-  getPhotoSrc(uploadFileInput, renderPhotoPreview);
   resetForm();
   createSlider();
 
@@ -95,4 +101,4 @@ const onImgUploadFormSubmit = (evt) => {
   request(onSuccess, showErrorLoad, 'POST', new FormData(evt.target));
 };
 
-uploadFileInput.addEventListener('change', openUploadForm);
+uploadFileInput.addEventListener('change', loadPreview);

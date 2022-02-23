@@ -69,16 +69,20 @@ const debounce = (callback) => {
   };
 };
 
-const getPhotoSrc = (fileChooser, onSuccess) => {
+const getPhotoSrc = (fileChooser) => {
   const file = fileChooser.files[0];
   const fileName = file.name.toLowerCase();
 
-  if (FILE_TYPES.some((it) => fileName.endsWith(it))) {
-    const reader = new FileReader();
+  return new Promise((resolve, reject) => {
+    if (FILE_TYPES.some((it) => fileName.endsWith(it))) {
+      const reader = new FileReader();
 
-    reader.readAsDataURL(file);
-    reader.addEventListener('load', () => onSuccess(reader.result), { once: true });
-  }
+      reader.readAsDataURL(file);
+      reader.addEventListener('load', () => resolve(reader.result), { once: true });
+    } else {
+      reject('Неверный формат файла');
+    }
+  });
 };
 
 export { getRandomInt, getRandomElement, getUniqueValue, removeDuplicate, shuffle, getWordEnding, isEscEvent, debounce, getPhotoSrc };
