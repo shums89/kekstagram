@@ -1,4 +1,5 @@
 const DEBOUNCE_INTERVAL = 500;
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const Keys = {
   ESC: 'Esc',
@@ -68,4 +69,16 @@ const debounce = (callback) => {
   };
 };
 
-export { getRandomInt, getRandomElement, getUniqueValue, removeDuplicate, shuffle, getWordEnding, isEscEvent, debounce };
+const getPhotoSrc = (fileChooser, onSuccess) => {
+  const file = fileChooser.files[0];
+  const fileName = file.name.toLowerCase();
+
+  if (FILE_TYPES.some((it) => fileName.endsWith(it))) {
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.addEventListener('load', () => onSuccess(reader.result), { once: true });
+  }
+};
+
+export { getRandomInt, getRandomElement, getUniqueValue, removeDuplicate, shuffle, getWordEnding, isEscEvent, debounce, getPhotoSrc };
