@@ -30,6 +30,7 @@ const createComment = (comment) => {
 
   commentBlock.querySelector('.social__picture').src = comment.avatar;
   commentBlock.querySelector('.social__picture').alt = comment.name;
+  commentBlock.querySelector('.social__picture').title = comment.name;
   commentBlock.querySelector('.social__text').textContent = comment.message;
 
   return commentBlock;

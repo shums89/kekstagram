@@ -1,5 +1,3 @@
-import './nouislider.js';
-
 const Effect = {
   chrome: { min: 0, max: 1, step: 0.1, style: (value) => `grayscale(${value})` },
   sepia: { min: 0, max: 1, step: 0.1, style: (value) => `sepia(${value})` },

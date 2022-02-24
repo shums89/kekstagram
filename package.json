@@ -2,22 +2,26 @@
   "name": "kekstagram",
   "version": "22.0.0",
   "private": true,
-  "description": "Личный проект «{{projectTitle}}» от HTML Academy",
+  "description": "Личный проект «Кекстаграм» от HTML Academy",
   "repository": {
     "type": "git",
-    "url": "{{sshUrl}}"
+    "url": "git@github.com:shums89/kekstagram.git"
   },
   "bugs": {
-    "url": "{{bugsUrl}}"
+    "url": "https://github.com/shums89/kekstagram/issues"
   },
   "devDependencies": {
     "browser-sync": "2.26.14",
     "eslint": "7.18.0",
-    "eslint-config-htmlacademy": "2.0.0"
+    "eslint-config-htmlacademy": "2.0.0",
+    "webpack": "5.69.1",
+    "webpack-cli": "4.9.2"
   },
   "license": "MIT",
   "dependencies": {},
   "scripts": {
+    "build.dev": "webpack --mode development",
+    "build.prod": "webpack --mode production",
     "start": "browser-sync start --server --no-ui --files \"js/**/*.js\"",
     "test": "eslint js/"
   },
